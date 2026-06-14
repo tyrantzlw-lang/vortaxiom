@@ -15,6 +15,23 @@ async function main() {
   await prisma.user.deleteMany();
 
   const password = await bcrypt.hash('vortaxiom2026', 10);
+  // Admin principal
+  const adminPassword = await bcrypt.hash('VortaxiomAdmin2026!', 10);
+  await prisma.user.create({
+    data: {
+      email: 'admin@vortaxiom.dev',
+      password: adminPassword,
+      name: 'Archiviste Principal',
+      role: 'admin',
+      profile: {
+        create: {
+          reputation: 500,
+          title: 'Archiviste Principal',
+          affiliation: 'gardiens',
+        }
+      }
+    }
+  });
 
   // Utilisateurs
   const users = await Promise.all([
