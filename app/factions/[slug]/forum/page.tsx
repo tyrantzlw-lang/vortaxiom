@@ -234,6 +234,7 @@ export default function FactionForum() {
 
               {/* Section commentaires */}
               <div className="border-t border-zinc-800 pt-6">
+                <ReactionBar postId={post.id} />
                 <button
                 
                   onClick={() => toggleComments(post.id)}
