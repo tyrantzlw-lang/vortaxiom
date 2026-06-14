@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import ReactionBar from '@/app/components/ReactionBar';
 
 interface FactionPost {
   id: number;
@@ -234,6 +235,7 @@ export default function FactionForum() {
               {/* Section commentaires */}
               <div className="border-t border-zinc-800 pt-6">
                 <button 
+                <ReactionBar postId={post.id} />
                   onClick={() => toggleComments(post.id)}
                   className="text-xs text-emerald-400 hover:underline mb-4"
                 >

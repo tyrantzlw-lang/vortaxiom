@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import prisma from '@/lib/prisma';
 import { getReactionImpact } from '@/lib/reputation';
+import { getFactionBonus } from '@/lib/faction-bonuses';
 
 const REACTION_OPTIONS = [
   "Excellent", "Pertinent", "Intéressant", "Acceptable",
@@ -27,6 +28,21 @@ export async function POST(req: NextRequest) {
   }
 
   const postIdNum = parseInt(post_id);
+
+  // Vérifier si l'utilisateur a déjà réagi à ce post
+  const existingReaction = await prisma.postReaction.findFirst({
+    where: {
+      postId: postIdNum,
+      userId: parseInt(reactorId),
+    },
+  });
+
+  if (existingReaction) {
+    return NextResponse.json(
+      { error: 'Tu as déjà réagi à ce post' },
+      { status: 409 }
+    );
+  }
 
   // Créer la réaction
   await prisma.postReaction.create({
