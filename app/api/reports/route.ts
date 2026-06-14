@@ -1,6 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
+
+export async function GET() {
+  const reports = await prisma.report.findMany({
+    include: {
+      user: {
+        select: { name: true }
+      }
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 30
+  });
+
+  const formatted = reports.map(r => ({
+    id: r.id,
+    title: r.title,
+    content: r.content,
+    name: r.user?.name || 'Anonyme',
+    created_at: r.createdAt.toISOString()
+  }));
+
+  return NextResponse.json(formatted);
+}
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession();
