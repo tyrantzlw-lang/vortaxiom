@@ -2,9 +2,27 @@
 
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+
+  const navLinks = [
+    { href: '/codex', label: 'Codex' },
+    { href: '/factions', label: 'Factions' },
+    { href: '/forum', label: 'Forum' },
+    { href: '/hors-rp', label: 'Hors RP' },
+    { href: '/rapports', label: 'Publications' },
+    { href: '/a-propos', label: 'À propos' },
+  ];
+
+  const isActive = (href: string) => {
+    if (href === '/factions') {
+      return pathname.startsWith('/factions');
+    }
+    return pathname === href || pathname.startsWith(href + '/');
+  };
 
   return (
     <nav className="border-b border-zinc-800 bg-[#0a0a0a]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0a0a0a]/80 sticky top-0 z-50">
@@ -22,12 +40,19 @@ export default function Navbar() {
 
         {/* Navigation principale */}
         <div className="flex items-center gap-8 text-sm">
-          <Link href="/codex" className="hover:text-white transition-colors">Codex</Link>
-          <Link href="/factions" className="hover:text-white transition-colors">Factions</Link>
-          <Link href="/forum" className="hover:text-white transition-colors">Forum</Link>
-          <Link href="/hors-rp" className="hover:text-white transition-colors">Hors RP</Link>
-          <Link href="/rapports" className="hover:text-white transition-colors">Publications</Link>
-          <Link href="/a-propos" className="hover:text-white transition-colors">À propos</Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`transition-colors ${
+                isActive(link.href)
+                  ? 'text-white font-medium'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         {/* Section droite - Auth */}
@@ -46,7 +71,9 @@ export default function Navbar() {
               )}
               <Link 
                 href="/profil" 
-                className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
+                className={`px-3 py-1.5 text-sm transition-colors ${
+                  isActive('/profil') ? 'text-white' : 'text-zinc-400 hover:text-white'
+                }`}
               >
                 {(session.user as any).name || 'Profil'}
               </Link>

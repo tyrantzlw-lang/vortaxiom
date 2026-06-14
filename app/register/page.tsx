@@ -9,16 +9,20 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, name }),
     });
+
+    setIsLoading(false);
 
     if (res.ok) {
       setSuccess(true);
@@ -55,6 +59,7 @@ export default function RegisterPage() {
             onChange={(e) => setName(e.target.value)}
             className="w-full bg-zinc-950 border border-zinc-800 px-5 py-3 rounded-lg focus:outline-none focus:border-zinc-600"
             required
+            disabled={isLoading}
           />
           <input
             type="email"
@@ -63,6 +68,7 @@ export default function RegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full bg-zinc-950 border border-zinc-800 px-5 py-3 rounded-lg focus:outline-none focus:border-zinc-600"
             required
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -71,15 +77,17 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-zinc-950 border border-zinc-800 px-5 py-3 rounded-lg focus:outline-none focus:border-zinc-600"
             required
+            disabled={isLoading}
           />
 
           {error && <div className="text-red-400 text-sm">{error}</div>}
 
           <button
             type="submit"
-            className="w-full py-3 bg-white text-black font-medium rounded-lg hover:bg-zinc-200 transition-colors"
+            disabled={isLoading}
+            className="w-full py-3 bg-white text-black font-medium rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Créer mon profil
+            {isLoading ? 'Création du profil...' : 'Créer mon profil'}
           </button>
         </form>
 

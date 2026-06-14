@@ -38,12 +38,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, liked: false });
   } else {
     // Like
-    await prisma.postLike.create({
+    const like = await prisma.postLike.create({
       data: {
         postId: parseInt(post_id),
         userId: parseInt(userId),
       },
     });
+
+    // Gain de réputation pour l'auteur du post
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(post_id) },
+      select: { userId: true }
+    });
+
+    if (post) {
+      await prisma.profile.update({
+        where: { userId: post.userId },
+        data: { reputation: { increment: 1 } }
+      });
+    }
+
     return NextResponse.json({ success: true, liked: true });
   }
 }
