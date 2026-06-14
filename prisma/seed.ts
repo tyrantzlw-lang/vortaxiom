@@ -15,7 +15,10 @@ async function main() {
   await prisma.user.deleteMany();
 
   const password = await bcrypt.hash('vortaxiom2026', 10);
-  // Admin principal
+
+  // ============================================
+  // ADMIN PRINCIPAL
+  // ============================================
   const adminPassword = await bcrypt.hash('VortaxiomAdmin2026!', 10);
   await prisma.user.create({
     data: {
@@ -33,7 +36,59 @@ async function main() {
     }
   });
 
-  // Utilisateurs
+  // ============================================
+  // A.R.A - Personnage de Lore (Admin-only)
+  // ============================================
+  const araPassword = await bcrypt.hash('VortexRosetta-ARA-2026!', 10);
+  const araUser = await prisma.user.create({
+    data: {
+      email: 'ara@vortex.dev',
+      password: araPassword,
+      name: 'A.R.A',
+      role: 'admin',
+      profile: {
+        create: {
+          reputation: 999,
+          title: 'Découvreur du Plénum',
+          affiliation: null,
+        }
+      }
+    }
+  });
+
+  // Post spécial Vortex Rosetta par A.R.A
+  await prisma.post.create({
+    data: {
+      userId: araUser.id,
+      title: 'VORTEX ROSETTA — Clé de déchiffrement de l\'Univers Hydrodynamique Unifié',
+      content: `Le document VORTEX ROSETTA sert de passerelle conceptuelle entre le formalisme mathématique du modèle VORTEX et son interprétation physique. Il définit l'ontologie du fluide primordial et détaille les mécanismes de brisure de symétrie chirale qui gouvernent l'émergence de la matière, de la gravité et de la complexité.
+
+L'ÉQUATION MAÎTRESSE
+
+L_VORTEX = w(g, φ) × [ L_cinétique - V(g, φ, J) + L_interaction - χ J · (∇ × J) ]
+
+Le Lagrangien Maître VORTEX.
+
+INTERPRÉTATION PHYSIQUE
+
+La Gravité comme Pression Osmotique :
+Dans VORTEX, la géométrie g n’est pas un canevas passif. Une concentration locale de fluide φ modifie la rigidité du facteur w. La gravité devient alors une pression osmotique macroscopique : la matière est poussée vers les zones de moindre résistance élastique du Plénum.
+
+La Stabilité de la Matière :
+Le terme chiral −χ J · (∇ × J) agit comme un verrou topologique. Un fermion est un nœud stable dans le flux. Le dissoudre nécessite une énergie colossale.
+
+L'Émergence de la Vie :
+La constante χ n’est pas confinée à l’infiniment petit. Elle agit comme un vent géométrique permanent qui guide l’auto-organisation des molécules en structures hélicoïdales. La vie est la cristallisation dynamique de la torsion intrinsèque du Plénum.
+
+— A.R.A, Initiative Quantum Cosmic Evolution, Février 2026`,
+    }
+  });
+
+  console.log('✅ A.R.A créé (réputation 999, admin-only, faction: aucune)');
+
+  // ============================================
+  // AUTRES UTILISATEURS
+  // ============================================
   const users = await Promise.all([
     prisma.user.create({
       data: {
@@ -79,63 +134,20 @@ async function main() {
 
   console.log('✅ Utilisateurs créés');
 
-  // Posts
-  const posts = await Promise.all([
-    prisma.post.create({
-      data: {
-        userId: users[0].id,
-        title: 'Sur la chiralité du flux temporel',
-        content: 'Si le temps possède une chiralité intrinsèque, alors les vortex ne sont pas des anomalies mais des nœuds de symétrie brisée.',
-      }
-    }),
-    prisma.post.create({
-      data: {
-        userId: users[2].id,
-        title: 'Le Plénum est-il conscient ?',
-        content: 'Mes dernières simulations montrent une corrélation étrange entre les fluctuations de densité et les patterns de décision collective.',
-      }
-    }),
-    prisma.post.create({
-      data: {
-        userId: users[1].id,
-        title: 'Paradoxe de la boucle de Calder',
-        content: 'Si on envoie une information vers le passé via un vortex stable, mais que cette information est ce qui a causé le vortex...',
-      }
-    }),
-  ]);
-
-  console.log('✅ Posts créés');
-
-  // Réactions
-  await Promise.all([
-    prisma.postReaction.create({ data: { postId: posts[0].id, userId: users[2].id, content: 'Excellent' } }),
-    prisma.postReaction.create({ data: { postId: posts[0].id, userId: users[3].id, content: 'Pertinent' } }),
-    prisma.postReaction.create({ data: { postId: posts[1].id, userId: users[0].id, content: 'Outrage' } }),
-    prisma.postReaction.create({ data: { postId: posts[2].id, userId: users[2].id, content: 'Intéressant' } }),
-    prisma.postReaction.create({ data: { postId: posts[2].id, userId: users[3].id, content: 'Rejet' } }),
-  ]);
-
-  console.log('✅ Réactions créées');
-
   // Relations entre factions
   await prisma.factionRelation.createMany({
     data: [
-      { factionA: 'chronautes', factionB: 'chiralistes', standing: 35 },
-      { factionA: 'chronautes', factionB: 'vortexiens', standing: -25 },
-      { factionA: 'chronautes', factionB: 'plenistes', standing: 10 },
-      { factionA: 'chronautes', factionB: 'gardiens', standing: 45 },
-      { factionA: 'chiralistes', factionB: 'vortexiens', standing: 60 },
-      { factionA: 'chiralistes', factionB: 'plenistes', standing: -40 },
-      { factionA: 'chiralistes', factionB: 'gardiens', standing: 20 },
-      { factionA: 'vortexiens', factionB: 'plenistes', standing: 25 },
-      { factionA: 'vortexiens', factionB: 'gardiens', standing: -55 },
-      { factionA: 'plenistes', factionB: 'gardiens', standing: 70 },
-    ],
-    skipDuplicates: true,
+      { factionA: 'vortexiens', factionB: 'chiralistes', standing: 2 },
+      { factionA: 'vortexiens', factionB: 'chronautes', standing: -1 },
+      { factionA: 'vortexiens', factionB: 'plenistes', standing: 3 },
+      { factionA: 'vortexiens', factionB: 'gardiens', standing: 1 },
+      { factionA: 'chiralistes', factionB: 'chronautes', standing: 4 },
+      { factionA: 'chiralistes', factionB: 'plenistes', standing: -2 },
+      { factionA: 'gardiens', factionB: 'plenistes', standing: 5 },
+    ]
   });
 
-  console.log('✅ Relations entre factions créées');
-  console.log('✅ Seed terminé avec succès !');
+  console.log('✅ Seed terminé');
 }
 
 main()
