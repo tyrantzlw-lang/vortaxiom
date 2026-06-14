@@ -1,9 +1,7 @@
-import Navbar from './components/Navbar';
 
 export default function VortaxiomHome() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-zinc-200">
-      <Navbar />
 
       {/* Hero */}
       <div className="max-w-5xl mx-auto px-8 pt-24 pb-20 text-center">
