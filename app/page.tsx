@@ -1,65 +1,62 @@
-import Image from "next/image";
+import Navbar from './components/Navbar';
 
-export default function Home() {
+export default function VortaxiomHome() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-[#0a0a0a] text-zinc-200">
+      <Navbar />
+
+      {/* Hero */}
+      <div className="max-w-5xl mx-auto px-8 pt-24 pb-20 text-center">
+        <div className="inline-block px-3 py-1 rounded-full border border-zinc-800 text-xs tracking-[2px] mb-6 text-zinc-400">
+          PROJET DE SCIENCE-FICTION SPÉCULATIVE
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <h1 className="text-7xl font-semibold tracking-tighter mb-4">
+          Le Plénum n’est pas vide.<br />Il est en mouvement.
+        </h1>
+
+        <p className="max-w-xl mx-auto text-xl text-zinc-400 mb-10">
+          Une plateforme communautaire dédiée à l’exploration d’une cosmologie 
+          où la réalité émerge d’écoulements dynamiques.
+        </p>
+
+        <div className="flex gap-4 justify-center">
+          <a 
+            href="/codex" 
+            className="px-8 py-3 bg-white text-black rounded-lg font-medium hover:bg-zinc-200 transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            Entrer dans le Codex
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <a 
+            href="/forum" 
+            className="px-8 py-3 border border-zinc-700 hover:bg-zinc-900 rounded-lg transition-colors"
           >
-            Documentation
+            Rejoindre les débats
           </a>
         </div>
-      </main>
+      </div>
+
+      {/* Sections principales */}
+      <div className="max-w-7xl mx-auto px-8 pb-24 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          { title: "Bibliothèque Centrale", desc: "Le Codex Vortaxiom, axiomes et chronologie", href: "/codex" },
+          { title: "Les Cinq Factions", desc: "Chronautes, Chiralistes, Vortexiens, Plénistes et Gardiens", href: "/factions" },
+          { title: "Forum du Flux", desc: "Débats entre les différentes écoles", href: "/forum" },
+          { title: "Espace Hors RP", desc: "Discussions méta, règles et technique", href: "/hors-rp" },
+          { title: "Publications", desc: "Rapports et contributions des chercheurs", href: "/rapports" },
+          { title: "Profil", desc: "Réputation, faction et progression", href: "/profil" },
+          { title: "À propos", desc: "Contexte, règles et avertissement fictionnel", href: "/a-propos" },
+        ].map((section, i) => (
+          <a 
+            key={i} 
+            href={section.href}
+            className="group border border-zinc-800 hover:border-zinc-700 p-8 rounded-2xl transition-all block"
+          >
+            <div className="font-medium text-lg mb-3 group-hover:text-white">{section.title}</div>
+            <div className="text-sm text-zinc-400">{section.desc}</div>
+          </a>
+        ))}
+      </div>
     </div>
   );
 }

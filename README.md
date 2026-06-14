@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vortaxiom
 
-## Getting Started
+**Projet de science-fiction spéculative collaborative**  
+Cosmologie hard SF basée sur le concept du Plénum (un milieu dynamique et en écoulement constant).
 
-First, run the development server:
+## Stack technique
+- Next.js 16 + TypeScript
+- Tailwind CSS
+- SQLite + NextAuth (credentials)
+- Design sombre, académique et minimaliste
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## État actuel du projet (Juin 2026)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Fonctionnalités implémentées
+- **Codex Vortaxiom** : 10 articles fondateurs et avancés
+- **Système de Factions** : 5 factions complètes (Chronautes, Chiralistes, Vortexiens, Plénistes, Gardiens du Flux)
+- **Système de réputation** : 7 rangs avec progression, titres dynamiques et simulation d’actions
+- **Comptes utilisateurs** : Inscription, connexion, profil personnel
+- **Navigation** : Complète et cohérente sur tout le site
+- **Design** : Interface sombre, professionnelle et immersive
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Structure
+- `/codex` → Bibliothèque des axiomes
+- `/factions` → Les cinq factions et leurs philosophies
+- `/profil` → Gestion du chercheur + simulation de réputation
+- `/forum`, `/institut`, `/observatoire`, `/lab` → Sections en place
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Prochaines étapes envisagées
+- Système de publications / rapports persistant
+- Amélioration du simulateur de Plénum
+- Modération et interactions entre factions
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*Tout le contenu est une œuvre de fiction dans un univers spéculatif.*

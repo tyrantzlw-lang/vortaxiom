@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  profile           Profile?
+  posts             Post[]
+  comments          Comment[]
+  reports           Report[]
+  oocPosts          OocPost[]
+  oocComments       OocComment[]
+  plenumSimulations PlenumSimulation[]
+  factionPosts      FactionPost[]
+  factionComments   FactionComment[]
+  postLikes         PostLike[]
+  postReactions     PostReaction[]
+  reportComments    ReportComment[]
+
+  @@map("users")
+}
+
+model Profile {
+  id          Int     @id @default(autoincrement())
+  userId      Int     @unique @map("user_id")
+  reputation  Int     @default(0)
+  title       String  @default("Étudiant du Flux")
+  affiliation String?
+  bio         String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("profiles")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  title     String
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user          User           @relation(fields: [userId], references: [id])
+  comments      Comment[]
+  postLikes     PostLike[]
+  postReactions PostReaction[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("comments")
+}
+
+model Report {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  title     String
+  content   String
+  status    String   @default("publié")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user           User            @relation(fields: [userId], references: [id])
+  reportComments ReportComment[]
+
+  @@map("reports")
+}
+
+model OocPost {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  title     String
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user     User         @relation(fields: [userId], references: [id])
+  comments OocComment[]
+
+  @@map("ooc_posts")
+}
+
+model OocComment {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post OocPost @relation(fields: [postId], references: [id])
+  user User    @relation(fields: [userId], references: [id])
+
+  @@map("ooc_comments")
+}
+
+model PlenumSimulation {
+  id          Int      @id @default(autoincrement())
+  userId      Int?     @map("user_id")
+  chi         Float
+  coherence   Float
+  turbulence  Float
+  density     Float
+  vortexCount Int      @map("vortex_count")
+  anomalyRisk Int      @map("anomaly_risk")
+  resonance   Float
+  stability   String
+  notes       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("plenum_simulations")
+}
+
+model FactionPost {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  faction   String
+  title     String
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user     User             @relation(fields: [userId], references: [id])
+  comments FactionComment[]
+
+  @@map("faction_posts")
+}
+
+model FactionComment {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post FactionPost @relation(fields: [postId], references: [id])
+  user User        @relation(fields: [userId], references: [id])
+
+  @@map("faction_comments")
+}
+
+model FactionRelation {
+  id          Int      @id @default(autoincrement())
+  factionA    String   @map("faction_a")
+  factionB    String   @map("faction_b")
+  standing    Int      @default(0)
+  lastUpdated DateTime @default(now()) @map("last_updated")
+
+  @@unique([factionA, factionB])
+  @@map("faction_relations")
+}
+
+model PostLike {
+  id     Int @id @default(autoincrement())
+  postId Int @map("post_id")
+  userId Int @map("user_id")
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+  @@map("post_likes")
+}
+
+model PostReaction {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("post_reactions")
+}
+
+model ReportComment {
+  id        Int      @id @default(autoincrement())
+  reportId  Int      @map("report_id")
+  userId    Int      @map("user_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  report Report @relation(fields: [reportId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("report_comments")
+}
